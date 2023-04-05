@@ -7,9 +7,13 @@ chat_id = 834411281 # Ваш chat ID, не меняйте название пе�
 
 def solution(p: float, x: np.array) -> tuple:
    n = len(x)
-   mean = np.mean(x)
-   std_error = np.std(x, ddof=1) / np.sqrt(n)  # стандартная ошибка среднего
-   t_val = t.ppf(1 - p / 2, n - 1)  # t-значение
-   left = mean - t_val * std_error
-   right = mean + t_val * std_error
-   return (left, right)
+   time = 86
+   mean_distance = np.mean(x)
+   variance = 0.5
+   sum_sq_deviation = np.sum((x - mean_distance) ** 2)
+   variance_acceleration = (2 * variance * sum_sq_deviation) / ((n - 1) * time ** 2)
+   std_error_acceleration = np.sqrt(variance_acceleration)
+   t_stat = norm.ppf((1 + p) / 2, n - 1)
+   lower_bound = mean_distance - t_stat * std_error_acceleration
+   upper_bound = mean_distance + t_stat * std_error_acceleration
+   return (lower_bound, upper_bound)
